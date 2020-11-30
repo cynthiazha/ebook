@@ -13,3 +13,8 @@ $ratio: 375 / 10;
   justify-content: flex-start;
   align-items: center;
 }
+@mixin right {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}

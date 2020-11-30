@@ -10,7 +10,7 @@ import Epub from 'epubjs'
 global.Epub = Epub
 export default {
   computed: {
-    ...mapGetters(['fileName'])
+    ...mapGetters(['fileName', 'menuVisible'])
   },
   mounted () {
     const fileName = this.$route.params.fileName.split('|').join('/')
@@ -54,7 +54,7 @@ export default {
       }
     },
     toggleTitleAndMenu () {
-      console.log('showMenu')
+      this.$store.dispatch('set_menuVisible', !this.menuVisible)
     }
   }
 }
