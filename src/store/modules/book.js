@@ -1,7 +1,12 @@
 const book = {
   state: {
     fileName: '',
-    menuVisible: false
+    menuVisible: false,
+    settingVisible: -1,
+    defaultFontSize: 16,
+    defaultFontFamily: 'Default',
+    currentBook: '',
+    fontFamilyVisible: false
   },
   mutations: {
     'SET_FILENAME' (state, fileName) {
@@ -9,14 +14,21 @@ const book = {
     },
     'SET_MENUVISIBLE' (state, menuVisible) {
       state.menuVisible = menuVisible
-    }
-  },
-  actions: {
-    'set_fileName' ({ commit }, fileName) {
-      return commit('SET_FILENAME', fileName)
     },
-    'set_menuVisible' ({ commit }, menuVisible) {
-      return commit('SET_MENUVISIBLE', menuVisible)
+    'SET_SETVISIBLE' (state, visible) {
+      state.settingVisible = visible
+    },
+    'SET_DEFAULTFONTSIZE' (state, fontSize) {
+      state.defaultFontSize = fontSize
+    },
+    'SET_DEFAULTFONTFAMILY' (state, fontFamily) {
+      state.defaultFontFamily = fontFamily
+    },
+    'SET_CURRENTBOOK' (state, book) {
+      state.currentBook = book
+    },
+    'SET_FONTFAMILYVISIBLE' (state, visible) {
+      state.fontFamilyVisible = visible
     }
   }
 }
