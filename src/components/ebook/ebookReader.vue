@@ -7,6 +7,7 @@
 <script>
 import { ebookMixin } from '@/utils/mixin'
 import Epub from 'epubjs'
+import * as Storage from '../../utils/localStorage'
 global.Epub = Epub
 export default {
   mixins: [ebookMixin],
@@ -17,6 +18,27 @@ export default {
     })
   },
   methods: {
+    initFontSize () {
+      let fontSize = Storage.getFontStorage(this.fileName)
+      if (!fontSize) {
+        fontSize = 16
+      }
+      return fontSize
+    },
+    initFontFamily () {
+      let fontFamily = Storage.getFontFamilyStorage(this.fileName)
+      if (!fontFamily) {
+        fontFamily = this.defaultFontFamily
+      }
+      return fontFamily
+    },
+    initTheme () {
+      let theme = Storage.getThemeStorage(this.fileName)
+      if (!theme) {
+        theme = this.defaultTheme
+      }
+      return theme
+    },
     initEpub () {
       const BASE_URL = process.env.VUE_APP_RES_URL + 'epub/'
       this.book = new Epub(BASE_URL + this.fileName + '.epub')
@@ -25,6 +47,9 @@ export default {
         width: window.innerWidth,
         height: window.innerHeight
       })
+      this.setFontSize(this.initFontSize())
+      this.setFontFamily(this.initFontFamily())
+      this.setTheme(this.initTheme())
       this.rendition.display()
       this.rendition.on('touchstart', event => {
         this.touchStartX = event.changedTouches[0].clientX

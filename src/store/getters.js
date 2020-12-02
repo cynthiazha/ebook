@@ -5,6 +5,7 @@ const book = {
   defaultFontSize: state => state.book.defaultFontSize,
   defaultFontFamily: state => state.book.defaultFontFamily,
   currentBook: state => state.book.currentBook,
-  fontFamilyVisible: state => state.book.fontFamilyVisible
+  fontFamilyVisible: state => state.book.fontFamilyVisible,
+  defaultTheme: state => state.book.defaultTheme
 }
 export default book

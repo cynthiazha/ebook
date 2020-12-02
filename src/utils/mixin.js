@@ -1,5 +1,7 @@
 import { mapGetters, mapActions } from 'vuex'
-import { FONT_SIZE_LIST, FONT_FAMILY } from './book'
+import { FONT_SIZE_LIST, FONT_FAMILY, themeList } from './book'
+import { addStyle, removeAllCss, findThemeObject } from './util'
+import * as Storage from './localStorage'
 export const ebookMixin = {
   computed: {
     ...mapGetters([
@@ -9,8 +11,12 @@ export const ebookMixin = {
       'defaultFontSize',
       'defaultFontFamily',
       'currentBook',
-      'fontFamilyVisible'
-    ])
+      'fontFamilyVisible',
+      'defaultTheme'
+    ]),
+    themeList () {
+      return themeList(this)
+    }
   },
   data () {
     return {
@@ -26,11 +32,13 @@ export const ebookMixin = {
       'set_defaultFontSize',
       'set_currentBook',
       'set_fontFamilyVisible',
-      'set_fontFamily'
+      'set_fontFamily',
+      'set_defaultTheme'
     ]),
     setFontSize (fontSize) {
       this.set_defaultFontSize(fontSize).then(() => {
         this.currentBook.rendition.themes.fontSize(fontSize + 'px')
+        Storage.setFontStorage(this.fileName, fontSize)
       })
     },
     setFontFamily (fontFamily) {
@@ -40,6 +48,7 @@ export const ebookMixin = {
         } else {
           this.currentBook.rendition.themes.font(fontFamily)
         }
+        Storage.setFontFamilyStorage(this.fileName, fontFamily)
       })
     },
     showFontFamilySetting () {
@@ -47,6 +56,42 @@ export const ebookMixin = {
     },
     hideFontFamilySetting () {
       this.set_fontFamilyVisible(false)
+    },
+    setTheme (theme) {
+      this.set_defaultTheme(theme).then(() => {
+        this.registerTheme()
+        const bodyObject = findThemeObject(theme, this.themeList)
+        for (const key in bodyObject) {
+          this.currentBook.rendition.themes.override(key, bodyObject[key], true)
+        }
+        this.setGlobalStyle(theme)
+        Storage.setThemeStorage(this.fileName, theme)
+      })
+    },
+    registerTheme () {
+      this.themeList.forEach(theme => {
+        this.currentBook.rendition.themes.register(theme.name, theme.style)
+      })
+    },
+    setGlobalStyle (theme) {
+      removeAllCss()
+      switch (theme) {
+        case 'Default':
+          addStyle('http://localhost:8090/theme/theme_default.css')
+          break
+        case 'Gold':
+          addStyle('http://localhost:8090/theme/theme_gold.css')
+          break
+        case 'Eye':
+          addStyle('http://localhost:8090/theme/theme_eye.css')
+          break
+        case 'Night':
+          addStyle('http://localhost:8090/theme/theme_night.css')
+          break
+        default:
+          addStyle('http://localhost:8090/theme/theme_default.css')
+          break
+      }
     }
   }
 }

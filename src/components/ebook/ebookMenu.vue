@@ -18,6 +18,7 @@
     </transition>
     <ebook-setting-font></ebook-setting-font>
     <ebook-font-family-pop></ebook-font-family-pop>
+    <ebook-setting-theme></ebook-setting-theme>
   </div>
 </template>
 
@@ -25,8 +26,9 @@
 import { ebookMixin } from '@/utils/mixin'
 import ebookSettingFont from './ebookSettingFont.vue'
 import EbookFontFamilyPop from './ebookFontFamilyPop.vue'
+import EbookSettingTheme from './ebookSettingTheme.vue'
 export default {
-  components: { ebookSettingFont, EbookFontFamilyPop },
+  components: { ebookSettingFont, EbookFontFamilyPop, EbookSettingTheme },
   mixins: [ebookMixin],
   methods: {
     showSetting (index) {
