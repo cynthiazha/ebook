@@ -51,3 +51,21 @@ export function setThemeStorage (fileName, theme) {
 export function getThemeStorage (fileName) {
   return getBookStorage(fileName, 'theme')
 }
+export function setReadingProgressStorage (fileName, progress) {
+  return setBookStorage(fileName, 'readingProgress', progress)
+}
+export function getReadingProgressStorage (fileName) {
+  return getBookStorage(fileName, 'readingProgress')
+}
+export function setReadingTime (fileName, time) {
+  return setBookStorage(fileName, 'readingTime', time)
+}
+export function getReadingTime (fileName) {
+  return getBookStorage(fileName, 'readingTime')
+}
+export function setSectionStorage (fileName, section) {
+  return setBookStorage(fileName, 'section', section)
+}
+export function getSectionStorage (fileName) {
+  return getBookStorage(fileName, 'section')
+}

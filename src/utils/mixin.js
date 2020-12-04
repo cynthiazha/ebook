@@ -12,7 +12,10 @@ export const ebookMixin = {
       'defaultFontFamily',
       'currentBook',
       'fontFamilyVisible',
-      'defaultTheme'
+      'defaultTheme',
+      'readingProgress',
+      'bookAvailable',
+      'section'
     ]),
     themeList () {
       return themeList(this)
@@ -33,7 +36,10 @@ export const ebookMixin = {
       'set_currentBook',
       'set_fontFamilyVisible',
       'set_fontFamily',
-      'set_defaultTheme'
+      'set_defaultTheme',
+      'set_readingProgress',
+      'set_bookAvailable',
+      'set_section'
     ]),
     setFontSize (fontSize) {
       this.set_defaultFontSize(fontSize).then(() => {
@@ -91,6 +97,43 @@ export const ebookMixin = {
         default:
           addStyle('http://localhost:8090/theme/theme_default.css')
           break
+      }
+    },
+    display (target) {
+      if (target) {
+        this.currentBook.rendition.display(target).then(() => {
+          this.refreshLocation()
+        })
+      } else {
+        this.currentBook.rendition.display().then(() => {
+          this.refreshLocation()
+        })
+      }
+    },
+    displayProgress () {
+      const cfi = this.currentBook.locations.cfiFromPercentage(this.readingProgress / 100) // 根据百分比得到cfi
+      console.log(cfi)
+      this.currentBook.rendition.display(cfi).then(() => {
+        this.refreshLocation()
+      })
+    },
+    displaySection (cb) {
+      const section = this.currentBook.section(this.section)
+      if (section && section.href) {
+        console.log(section.href)
+        this.currentBook.rendition.display(section.href).then(() => {
+          this.refreshLocation()
+          if (cb) cb()
+        })
+      }
+    },
+    refreshLocation () {
+      const currentLocation = this.currentBook.rendition.currentLocation()
+      if (currentLocation.start && currentLocation.start.index) {
+        this.set_section(currentLocation.start.index)
+        const progress = this.currentBook.locations.percentageFromCfi(currentLocation.start.cfi) // 根据cfi得到百分比
+        this.set_readingProgress(Math.floor(progress * 100))
+        Storage.setSectionStorage(this.fileName, currentLocation.start.cfi)
       }
     }
   }

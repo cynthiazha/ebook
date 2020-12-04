@@ -21,7 +21,16 @@ const actions = {
     return commit('SET_DEFAULTFONTFAMILY', fontFamily)
   },
   'set_defaultTheme' ({ commit }, theme) {
-    commit('SET_DEFAULT_THEME', theme)
+    return commit('SET_DEFAULT_THEME', theme)
+  },
+  'set_readingProgress' ({ commit }, readingProgress) {
+    return commit('SET_READING_PROGRESS', readingProgress)
+  },
+  'set_bookAvailable' ({ commit }, bookAvailable) {
+    return commit('SET_BOOK_AVAILABLE', bookAvailable)
+  },
+  'set_section' ({ commit }, section) {
+    return commit('SET_SECTION', section)
   }
 }
 export default actions

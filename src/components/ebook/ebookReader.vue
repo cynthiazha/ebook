@@ -39,10 +39,14 @@ export default {
       }
       return theme
     },
-    initEpub () {
-      const BASE_URL = process.env.VUE_APP_RES_URL + 'epub/'
-      this.book = new Epub(BASE_URL + this.fileName + '.epub')
-      this.set_currentBook(this.book)
+    initReadingProgress () {
+      let progress = Storage.getReadingProgressStorage(this.fileName)
+      if (!progress) {
+        progress = this.readingProgress
+      }
+      return progress
+    },
+    initRendition () {
       this.rendition = this.book.renderTo('read', {
         width: window.innerWidth,
         height: window.innerHeight
@@ -50,11 +54,8 @@ export default {
       this.setFontSize(this.initFontSize())
       this.setFontFamily(this.initFontFamily())
       this.setTheme(this.initTheme())
+      this.set_readingProgress(this.initReadingProgress())
       this.rendition.display()
-      this.rendition.on('touchstart', event => {
-        this.touchStartX = event.changedTouches[0].clientX
-        this.timeStart = event.timeStamp
-      })
       this.rendition.hooks.content.register(contents => {
         Promise.all([
           contents.addStylesheet(`${process.env.VUE_APP_RES_URL}/fonts/cabin.css`),
@@ -64,6 +65,12 @@ export default {
         ]).then(() => {
           console.log('字体文件加载完成')
         })
+      })
+    },
+    initGesture () {
+      this.rendition.on('touchstart', event => {
+        this.touchStartX = event.changedTouches[0].clientX
+        this.timeStart = event.timeStamp
       })
       this.rendition.on('touchend', event => {
         this.touchEndX = event.changedTouches[0].clientX - this.touchStartX
@@ -77,15 +84,35 @@ export default {
         }
       })
     },
+    initEpub () {
+      const BASE_URL = process.env.VUE_APP_RES_URL + 'epub/'
+      this.book = new Epub(BASE_URL + this.fileName + '.epub')
+      this.set_currentBook(this.book)
+      this.initRendition()
+      this.initGesture()
+      this.book.ready.then(() => {
+        return this.book.locations.generate(750 * (window.innerWidth / 375) * (Storage.getFontStorage(this.fileName) / 16))
+      }).then(locations => {
+        this.set_bookAvailable(true)
+        const location = Storage.getSectionStorage(this.fileName)
+        if (location) {
+          this.display(location)
+        } else {
+          this.display()
+        }
+      })
+    },
     prevPage () {
       if (this.rendition) {
         this.rendition.prev()
+        this.refreshLocation()
       }
       this.hideTitleAndMenu()
     },
     nextPage () {
       if (this.rendition) {
         this.rendition.next()
+        this.refreshLocation()
       }
       this.hideTitleAndMenu()
     },
