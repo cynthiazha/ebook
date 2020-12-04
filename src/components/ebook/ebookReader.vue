@@ -84,16 +84,24 @@ export default {
         }
       })
     },
+    parseBook () {
+      this.book.loaded.navigation.then((nav) => {
+        console.log(nav.toc)
+        this.set_navigation(nav.toc)
+      })
+    },
     initEpub () {
       const BASE_URL = process.env.VUE_APP_RES_URL + 'epub/'
       this.book = new Epub(BASE_URL + this.fileName + '.epub')
       this.set_currentBook(this.book)
       this.initRendition()
       this.initGesture()
+      this.parseBook()
       this.book.ready.then(() => {
         return this.book.locations.generate(750 * (window.innerWidth / 375) * (Storage.getFontStorage(this.fileName) / 16))
       }).then(locations => {
         this.set_bookAvailable(true)
+        this.set_isPagination(false)
         const location = Storage.getSectionStorage(this.fileName)
         if (location) {
           this.display(location)
@@ -122,11 +130,6 @@ export default {
         this.hideFontFamilySetting(false)
       }
       this.set_menuVisible(!this.menuVisible)
-    },
-    hideTitleAndMenu () {
-      this.set_menuVisible(false)
-      this.set_setVisible(-1)
-      this.hideFontFamilySetting(false)
     }
   }
 }

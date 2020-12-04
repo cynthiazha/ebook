@@ -10,7 +10,9 @@ const book = {
     defaultTheme: 'Default',
     readingProgress: 0,
     bookAvailable: false,
-    section: 0
+    section: 0,
+    isPaginating: true,
+    navigation: null
   },
   mutations: {
     'SET_FILENAME' (state, fileName) {
@@ -45,6 +47,12 @@ const book = {
     },
     'SET_SECTION' (state, section) {
       state.section = section
+    },
+    'SET_ISPAGINATION' (state, isPagination) {
+      state.isPaginating = isPagination
+    },
+    'SET_NAVIGATION' (state, navigation) {
+      state.navigation = navigation
     }
   }
 }

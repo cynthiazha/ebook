@@ -31,6 +31,12 @@ const actions = {
   },
   'set_section' ({ commit }, section) {
     return commit('SET_SECTION', section)
+  },
+  'set_isPagination' ({ commit }, isPagination) {
+    return commit('SET_ISPAGINATION', isPagination)
+  },
+  'set_navigation' ({ commit }, navigation) {
+    return commit('SET_NAVIGATION', navigation)
   }
 }
 export default actions

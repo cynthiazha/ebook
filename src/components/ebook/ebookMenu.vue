@@ -20,6 +20,7 @@
     <ebook-font-family-pop></ebook-font-family-pop>
     <ebook-setting-theme></ebook-setting-theme>
     <ebook-setting-progress></ebook-setting-progress>
+    <ebook-slide></ebook-slide>
   </div>
 </template>
 
@@ -29,8 +30,9 @@ import ebookSettingFont from './ebookSettingFont.vue'
 import EbookFontFamilyPop from './ebookFontFamilyPop.vue'
 import EbookSettingTheme from './ebookSettingTheme.vue'
 import EbookSettingProgress from './ebookSettingProgress.vue'
+import EbookSlide from './ebookSlide.vue'
 export default {
-  components: { ebookSettingFont, EbookFontFamilyPop, EbookSettingTheme, EbookSettingProgress },
+  components: { ebookSettingFont, EbookFontFamilyPop, EbookSettingTheme, EbookSettingProgress, EbookSlide },
   mixins: [ebookMixin],
   methods: {
     showSetting (index) {

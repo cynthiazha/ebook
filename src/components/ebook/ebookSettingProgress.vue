@@ -32,7 +32,7 @@
 </template>
 
 <script>
-import { getReadingTime, setReadingProgressStorage } from '../../utils/localStorage'
+import { setReadingProgressStorage } from '../../utils/localStorage'
 import { ebookMixin } from '../../utils/mixin'
 export default {
   mixins: [ebookMixin],
@@ -75,14 +75,6 @@ export default {
           })
         })
       }
-    },
-    getReadTime () {
-      const readingTime = getReadingTime(this.fileName)
-      let minutes = 0
-      if (readingTime) {
-        minutes = Math.ceil(readingTime / 60)
-      }
-      return this.$t('book.haveRead').replace('$1', minutes)
     },
     updateProgressBg () {
       this.$refs.progress.style.backgroundSize = this.readingProgress + '% 100%'

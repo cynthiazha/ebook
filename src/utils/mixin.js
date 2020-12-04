@@ -15,7 +15,9 @@ export const ebookMixin = {
       'defaultTheme',
       'readingProgress',
       'bookAvailable',
-      'section'
+      'section',
+      'isPagination',
+      'navigation'
     ]),
     themeList () {
       return themeList(this)
@@ -39,7 +41,9 @@ export const ebookMixin = {
       'set_defaultTheme',
       'set_readingProgress',
       'set_bookAvailable',
-      'set_section'
+      'set_section',
+      'set_isPagination',
+      'set_navigation'
     ]),
     setFontSize (fontSize) {
       this.set_defaultFontSize(fontSize).then(() => {
@@ -135,6 +139,19 @@ export const ebookMixin = {
         this.set_readingProgress(Math.floor(progress * 100))
         Storage.setSectionStorage(this.fileName, currentLocation.start.cfi)
       }
+    },
+    hideTitleAndMenu () {
+      this.set_menuVisible(false)
+      this.set_setVisible(-1)
+      this.hideFontFamilySetting(false)
+    },
+    getReadTime () {
+      const readingTime = Storage.getReadingTime(this.fileName)
+      let minutes = 0
+      if (readingTime) {
+        minutes = Math.ceil(readingTime / 60)
+      }
+      return this.$t('book.haveRead').replace('$1', minutes)
     }
   }
 }
